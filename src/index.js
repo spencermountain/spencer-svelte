@@ -1,4 +1,4 @@
-import Show from './Show.svelte'
+import Show from './fromPug.html'
 
 const app = new Show({
   target: document.body,
