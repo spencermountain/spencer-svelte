@@ -1,7 +1,8 @@
 <script>
+  export let name = 'a svelte component'
 </script>
 
 
 <div>
-  i am in a svelte component
+  i am {name}
 </div>

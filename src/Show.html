@@ -1,0 +1,3 @@
+<script>import Child from './Child.svelte'
+export let name = 'world'
+</script><div><div>hello {name}</div><input type="text" bind:value="{name}"/><Child name="{name}"></Child></div>

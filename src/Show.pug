@@ -1,0 +1,14 @@
+script.
+  import Child from './Child.svelte'
+  export let name = 'world'
+
+div
+  div hello {name}
+  input(type="text" bind:value="{name}") 
+  Child(name="{name}")
+  //- yaaa
+
+
+  
+
+   

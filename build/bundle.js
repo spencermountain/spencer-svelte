@@ -37,8 +37,26 @@ var app = (function () {
     function element(name) {
         return document.createElement(name);
     }
+    function text(data) {
+        return document.createTextNode(data);
+    }
+    function listen(node, event, handler, options) {
+        node.addEventListener(event, handler, options);
+        return () => node.removeEventListener(event, handler, options);
+    }
+    function attr(node, attribute, value) {
+        if (value == null)
+            node.removeAttribute(attribute);
+        else if (node.getAttribute(attribute) !== value)
+            node.setAttribute(attribute, value);
+    }
     function children(element) {
         return Array.from(element.childNodes);
+    }
+    function set_input_value(input, value) {
+        if (value != null || input.value) {
+            input.value = value;
+        }
     }
     function custom_event(type, detail) {
         const e = document.createEvent('CustomEvent');
@@ -269,6 +287,33 @@ var app = (function () {
         dispatch_dev("SvelteDOMRemove", { node });
         detach(node);
     }
+    function listen_dev(node, event, handler, options, has_prevent_default, has_stop_propagation) {
+        const modifiers = options === true ? ["capture"] : options ? Array.from(Object.keys(options)) : [];
+        if (has_prevent_default)
+            modifiers.push('preventDefault');
+        if (has_stop_propagation)
+            modifiers.push('stopPropagation');
+        dispatch_dev("SvelteDOMAddEventListener", { node, event, handler, modifiers });
+        const dispose = listen(node, event, handler, options);
+        return () => {
+            dispatch_dev("SvelteDOMRemoveEventListener", { node, event, handler, modifiers });
+            dispose();
+        };
+    }
+    function attr_dev(node, attribute, value) {
+        attr(node, attribute, value);
+        if (value == null)
+            dispatch_dev("SvelteDOMRemoveAttribute", { node, attribute });
+        else
+            dispatch_dev("SvelteDOMSetAttribute", { node, attribute, value });
+    }
+    function set_data_dev(text, data) {
+        data = '' + data;
+        if (text.data === data)
+            return;
+        dispatch_dev("SvelteDOMSetData", { node: text, data });
+        text.data = data;
+    }
     function validate_slots(name, slot, keys) {
         for (const slot_key of Object.keys(slot)) {
             if (!~keys.indexOf(slot_key)) {
@@ -299,20 +344,27 @@ var app = (function () {
 
     function create_fragment(ctx) {
     	let div;
+    	let t0;
+    	let t1;
 
     	const block = {
     		c: function create() {
     			div = element("div");
-    			div.textContent = "i am in a svelte component";
-    			add_location(div, file, 4, 0, 21);
+    			t0 = text("i am ");
+    			t1 = text(/*name*/ ctx[0]);
+    			add_location(div, file, 5, 0, 62);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
+    			append_dev(div, t0);
+    			append_dev(div, t1);
     		},
-    		p: noop,
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*name*/ 1) set_data_dev(t1, /*name*/ ctx[0]);
+    		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
@@ -331,8 +383,9 @@ var app = (function () {
     	return block;
     }
 
-    function instance($$self, $$props) {
-    	const writable_props = [];
+    function instance($$self, $$props, $$invalidate) {
+    	let { name = "a svelte component" } = $$props;
+    	const writable_props = ["name"];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Child> was created with unknown prop '${key}'`);
@@ -340,13 +393,28 @@ var app = (function () {
 
     	let { $$slots = {}, $$scope } = $$props;
     	validate_slots("Child", $$slots, []);
-    	return [];
+
+    	$$self.$set = $$props => {
+    		if ("name" in $$props) $$invalidate(0, name = $$props.name);
+    	};
+
+    	$$self.$capture_state = () => ({ name });
+
+    	$$self.$inject_state = $$props => {
+    		if ("name" in $$props) $$invalidate(0, name = $$props.name);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [name];
     }
 
     class Child extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance, create_fragment, safe_not_equal, {});
+    		init(this, options, instance, create_fragment, safe_not_equal, { name: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -355,36 +423,72 @@ var app = (function () {
     			id: create_fragment.name
     		});
     	}
+
+    	get name() {
+    		throw new Error("<Child>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set name(value) {
+    		throw new Error("<Child>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
     }
 
-    /* src/fromPug.html generated by Svelte v3.21.0 */
-    const file$1 = "src/fromPug.html";
+    /* src/Show.html generated by Svelte v3.21.0 */
+    const file$1 = "src/Show.html";
 
     function create_fragment$1(ctx) {
-    	let div;
-    	let h2;
+    	let div1;
+    	let div0;
+    	let t0;
+    	let t1;
+    	let input;
     	let current;
-    	const child = new Child({ $$inline: true });
+    	let dispose;
+
+    	const child = new Child({
+    			props: { name: /*name*/ ctx[0] },
+    			$$inline: true
+    		});
 
     	const block = {
     		c: function create() {
-    			div = element("div");
-    			h2 = element("h2");
-    			h2.textContent = `hello ${/*foo*/ ctx[0]}`;
+    			div1 = element("div");
+    			div0 = element("div");
+    			t0 = text("hello ");
+    			t1 = text(/*name*/ ctx[0]);
+    			input = element("input");
     			create_component(child.$$.fragment);
-    			add_location(h2, file$1, 2, 14, 75);
-    			add_location(div, file$1, 2, 9, 70);
+    			add_location(div0, file$1, 2, 14, 83);
+    			attr_dev(input, "type", "text");
+    			add_location(input, file$1, 2, 37, 106);
+    			add_location(div1, file$1, 2, 9, 78);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, div, anchor);
-    			append_dev(div, h2);
-    			mount_component(child, div, null);
+    		m: function mount(target, anchor, remount) {
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			append_dev(div0, t0);
+    			append_dev(div0, t1);
+    			append_dev(div1, input);
+    			set_input_value(input, /*name*/ ctx[0]);
+    			mount_component(child, div1, null);
     			current = true;
+    			if (remount) dispose();
+    			dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[1]);
     		},
-    		p: noop,
+    		p: function update(ctx, [dirty]) {
+    			if (!current || dirty & /*name*/ 1) set_data_dev(t1, /*name*/ ctx[0]);
+
+    			if (dirty & /*name*/ 1 && input.value !== /*name*/ ctx[0]) {
+    				set_input_value(input, /*name*/ ctx[0]);
+    			}
+
+    			const child_changes = {};
+    			if (dirty & /*name*/ 1) child_changes.name = /*name*/ ctx[0];
+    			child.$set(child_changes);
+    		},
     		i: function intro(local) {
     			if (current) return;
     			transition_in(child.$$.fragment, local);
@@ -395,8 +499,9 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div);
+    			if (detaching) detach_dev(div1);
     			destroy_component(child);
+    			dispose();
     		}
     	};
 
@@ -412,46 +517,64 @@ var app = (function () {
     }
 
     function instance$1($$self, $$props, $$invalidate) {
-    	let foo = "world";
-    	const writable_props = [];
+    	let { name = "world" } = $$props;
+    	const writable_props = ["name"];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<FromPug> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Show> was created with unknown prop '${key}'`);
     	});
 
     	let { $$slots = {}, $$scope } = $$props;
-    	validate_slots("FromPug", $$slots, []);
-    	$$self.$capture_state = () => ({ Child, foo });
+    	validate_slots("Show", $$slots, []);
+
+    	function input_input_handler() {
+    		name = this.value;
+    		$$invalidate(0, name);
+    	}
+
+    	$$self.$set = $$props => {
+    		if ("name" in $$props) $$invalidate(0, name = $$props.name);
+    	};
+
+    	$$self.$capture_state = () => ({ Child, name });
 
     	$$self.$inject_state = $$props => {
-    		if ("foo" in $$props) $$invalidate(0, foo = $$props.foo);
+    		if ("name" in $$props) $$invalidate(0, name = $$props.name);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [foo];
+    	return [name, input_input_handler];
     }
 
-    class FromPug extends SvelteComponentDev {
+    class Show extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { name: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
-    			tagName: "FromPug",
+    			tagName: "Show",
     			options,
     			id: create_fragment$1.name
     		});
     	}
+
+    	get name() {
+    		throw new Error("<Show>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set name(value) {
+    		throw new Error("<Show>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
     }
 
-    const app = new FromPug({
+    const app = new Show({
       target: document.body,
       props: {
-        name: 'foo',
+        name: 'world',
       },
     });
 

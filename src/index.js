@@ -1,9 +1,9 @@
-import Show from './fromPug.html'
+import Show from './Show.html'
 
 const app = new Show({
   target: document.body,
   props: {
-    name: 'foo',
+    name: 'world',
   },
 })
 
