@@ -1,35 +1,15 @@
 {
-  "name": "app",
-  "version": "0.0.1",
   "scripts": {
-    "build": "rollup -c",
-    "start": "rollup -c -w",
-    "watch": "npm run start",
-    "serve": "serve"
-  },
-  "prettier": {
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "plugins": [
-      "prettier-plugin-svelte"
-    ]
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "11.1.0",
-    "@rollup/plugin-node-resolve": "^7.0.0",
-    "pug": "^2.0.4",
-    "rollup": "2.7.3",
-    "rollup-plugin-livereload": "^1.0.0",
-    "rollup-plugin-svelte": "^5.0.3",
-    "rollup-plugin-terser": "^5.1.2",
-    "serve": "^11.3.0",
-    "svelte": "^3.0.0",
-    "svelte-preprocess": "^3.7.4"
+    "start": "snowpack dev",
+    "build": "snowpack build",
+    "test": ""
   },
   "dependencies": {
-    "prettier-plugin-svelte": "^0.7.0",
-    "sass": "^1.26.5"
+    "svelte": "^3.24.0"
+  },
+  "devDependencies": {
+    "@snowpack/app-scripts-svelte": "^1.8.4",
+    "snowpack": "^2.9.0",
+    "svelte-check": "^1.0.0"
   }
 }
