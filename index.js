@@ -5,8 +5,7 @@ const server = require('./_lib/server')
 const build = require('./_lib/build')
 const watch = require('./_lib/watch')
 
-let args = process.argv.slice(2)
-console.log(args)
+let args = process.argv.slice(1)
 let cmd = 'watch'
 args = args.filter((a) => {
   a = a.trim()
@@ -25,10 +24,11 @@ args = args.filter((a) => {
     cmd = 'pug'
     return false
   }
+  if (a === 'npx' || a === 'node' || a === 'spencer-svelte') {
+    return false
+  }
   return true
 })
-
-console.log('#2', args)
 
 if (cmd === 'build') {
   // build command
