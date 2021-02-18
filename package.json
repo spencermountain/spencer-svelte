@@ -1,15 +1,41 @@
 {
+  "name": "spencer-svelte",
+  "version": "0.0.1",
+  "description": "opinionated svelte boilerplate",
   "scripts": {
-    "start": "snowpack dev",
-    "build": "snowpack build",
-    "test": ""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "spencer-svelte/new": "new.js",
+    "spencer-svelte/build": "build.js",
+    "spencer-svelte/watch": "watch.js",
+    "spencer-svelte/pug": "pug.js"
+  },
+  "bugs": {
+    "url": "https://github.com/spencermountain/spencer-svelte/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spencermountain/spencer-svelte.git"
+  },
+  "homepage": "https://github.com/spencermountain/spencer-svelte#readme",
+  "author": "spencermountain",
+  "license": "MIT",
   "dependencies": {
-    "svelte": "^3.24.0"
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "chokidar": "^3.5.1",
+    "colorette": "^1.2.1",
+    "connect": "^3.7.0",
+    "connect-livereload": "^0.6.1",
+    "livereload": "^0.9.1",
+    "pug": "^3.0.0",
+    "rollup": "^2.39.0",
+    "rollup-plugin-svelte": "6.0.1",
+    "serve-static": "^1.14.1",
+    "shelljs": "^0.8.4",
+    "svelte": "^3.32.3"
   },
-  "devDependencies": {
-    "@snowpack/app-scripts-svelte": "^1.8.4",
-    "snowpack": "^2.9.0",
-    "svelte-check": "^1.0.0"
-  }
+  "devDependencies": {}
 }
