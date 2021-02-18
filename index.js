@@ -45,6 +45,7 @@ if (cmd === 'build') {
   let dest = path.join(__dirname, './defaults/')
   sh.cp('-R', dest, dir)
 } else if (cmd === 'pug') {
+  // pug watch command
   let name = args.join(' ') || '/*.pug'
   let dir = args.join(' ') || ''
   let abs = path.join(process.cwd(), `./${dir}`)

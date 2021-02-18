@@ -1,15 +1,11 @@
 {
   "name": "spencer-svelte",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "opinionated svelte boilerplate",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "spencer-svelte/new": "new.js",
-    "spencer-svelte/build": "build.js",
-    "spencer-svelte/watch": "watch.js",
-    "spencer-svelte/pug": "pug.js",
     "spencer-svelte": "index.js"
   },
   "bugs": {

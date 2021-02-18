@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-console.log('build prod svelte')
 const sh = require('shelljs')
 const path = require('path')
 const build = require('./_lib/build')
