@@ -9,7 +9,8 @@
     "spencer-svelte/new": "new.js",
     "spencer-svelte/build": "build.js",
     "spencer-svelte/watch": "watch.js",
-    "spencer-svelte/pug": "pug.js"
+    "spencer-svelte/pug": "pug.js",
+    "spencer-svelte": "watch.js"
   },
   "bugs": {
     "url": "https://github.com/spencermountain/spencer-svelte/issues"
