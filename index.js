@@ -6,8 +6,10 @@ const build = require('./_lib/build')
 const watch = require('./_lib/watch')
 
 let args = process.argv.slice(2)
+console.log(args)
 let cmd = 'watch'
 args = args.filter((a) => {
+  a = a.trim()
   if (a === '-w') {
     return false
   }
@@ -25,6 +27,8 @@ args = args.filter((a) => {
   }
   return true
 })
+
+console.log('#2', args)
 
 if (cmd === 'build') {
   // build command
