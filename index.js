@@ -24,7 +24,12 @@ args = args.filter((a) => {
     cmd = 'pug'
     return false
   }
-  if (a === 'npx' || a === 'node' || a === 'spencer-svelte') {
+  if (
+    a === 'npx' ||
+    a === 'node' ||
+    a === 'spencer-svelte' ||
+    a.match(/spencer-svelte/)
+  ) {
     return false
   }
   return true
@@ -41,7 +46,7 @@ if (cmd === 'build') {
   let name = args.join(' ')
   let d = new Date()
   let date = d.toISOString().substr(0, 10)
-  let dir = `./${name || date}`
+  let dir = `${name || date}`
   let dest = path.join(__dirname, './defaults/')
   sh.cp('-R', dest, dir)
 } else if (cmd === 'pug') {
