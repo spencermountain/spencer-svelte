@@ -6,5 +6,5 @@ let d = new Date()
 let date = d.toISOString().substr(0, 10)
 let dir = `./${name || date}`
 
-let dest = path.join(process.cwd(), './defaults/')
+let dest = path.join(__dirname, './defaults/')
 sh.cp('-R', dest, dir)

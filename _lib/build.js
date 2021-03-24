@@ -12,7 +12,14 @@ const buildPost = function (abs) {
   return rollup
     .rollup({
       input: file,
-      plugins: [json(), svelte(), nodeResolve(), commonjs()],
+      plugins: [
+        json(),
+        svelte(),
+        nodeResolve({
+          dedupe: ['svelte', 'svelte/internal'],
+        }),
+        commonjs(),
+      ],
     })
     .then((bundle) => {
       bundle.write({

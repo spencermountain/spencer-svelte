@@ -6,7 +6,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "spencer-svelte": "index.js"
+    "spencer-svelte": "index.js",
+    "svelte-watch": "watch.js",
+    "svelte-build": "build.js",
+    "svelte-new": "new.js",
+    "svelte-pug": "pug.js"
   },
   "bugs": {
     "url": "https://github.com/spencermountain/spencer-svelte/issues"
